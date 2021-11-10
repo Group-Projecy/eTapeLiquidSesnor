@@ -4,10 +4,11 @@
 
 from gpiozero import MCP3008
 
-pot = MCP3008(0)
+LDR = MCP3008(0)
 
 while True:
-    print(pot.value)
+    print(LDR.value)
+
     #TODO: Slow the output down - printed to fast
     #TODO: Code the etape with the slowed down out and intergrate the mcp and etape as one
 
