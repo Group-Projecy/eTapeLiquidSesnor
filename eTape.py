@@ -4,18 +4,20 @@ import time
 resistor = 560
 eTape = MCP3008(0)
 # TODO: Calibration is off need to re adjust
-no_volume_resistance = 806.546  # Resistance value (in ohms) when no liquid is present
-calibration_resistance = 463.582  # Resistance value (in ohms) when liquid is at max line.
+no_volume_resistance = 2086  # Resistance value (in ohms) when no liquid is present
+calibration_resistance = 0.00  # Resistance value (in ohms) when liquid is at max line.
+calibration_volume = 0.00
 
 
 def main():
     while True:
         # ohms_value = calculate_ohms_value(eTape)
-        # water_level = water_level_prentage(ohms_value)
+        # water_level = water_level_percentage(ohms_value)
         # print(f'water level %: {water_level}')
         # print('\n')
         test_code()
         time.sleep(1)
+        print("\n")
 
 
 def read_resistance():
@@ -23,10 +25,15 @@ def read_resistance():
     # covert to resistance
     resist = (1023 / reading) - 1
     resist = resistor / resist
-    print(f'resistance: {resist}')
+    print('resistance(): %.2f' % resist)
 
 
-def water_level_prentage(ohms_value):
+def resistance_to_volume():
+    # TODO: Need to implement
+    return 0
+
+
+def water_level_percentage(ohms_value):
     percentage = (no_volume_resistance - ohms_value) / (no_volume_resistance - calibration_resistance)
     cm = 30 * percentage
     print(f'cm value: {cm}')
@@ -40,7 +47,8 @@ def test_code():
     resist = (1023 / reading) - 1
     resist = resistor / resist
     print(f'resistance: {resist}')
-    water_level_prentage(reading)
+    read_resistance()
+    water_level_percentage(reading)
 
 
 if __name__ == "__main__":
