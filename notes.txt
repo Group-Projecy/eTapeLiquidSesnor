@@ -1,0 +1,10 @@
+voltage:
+    voltage = (5.0 / 1023) * ohmsValue
+    print(f'voltage: {voltage}')
+
+
+def calculate_ohms_value(eTape):
+    adc_value = eTape.value
+    # covert value from kohms  to ohms
+    ohms_value: float = adc_value * 1000
+    return ohms_value
