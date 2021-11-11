@@ -5,39 +5,26 @@ resistor = 560
 
 eTape = MCP3008(0)
 
-# eTape.voltage
-def readVoltage(eTape):
-    #getting the ADC value
-    adcValue = eTape.value
-    # covert adcValue (analogValue) to a voltage (0-5V)
-    # voltage = adcValue * (5.0/1023)
-    voltage = (adcValue/1023)*5.0
-    return voltage
+
+def readResistance(eTape,resistor):
+    return 0
 
 
 while True:
-    # # print(f'ADC Value: {eTape.value}')
-    # # voltage = readVoltage(eTape)
-    # # print(f'Voltage: {voltage}')
-    # analogReading = eTape.value
-    # print(f'Analog Reading: {analogReading}')
-    # # covert value to resistance
-    # # resistance = (1023.0 / analogReading) - 1.0
-    # resistance = resistor / analogReading
-    # print(f'Sensor output Resistance: {resistance} ohms')
-    # volts = 5 * analogReading
-    # print(f'volt {volts}')
-    # print('\n')
-    # time.sleep(5)
-
-    adcReading = eTape.value
-    print(f'ADC Reading: {adcReading}')
-    volts = 5 * adcReading
-    x = (1023.0 / 5.0) * volts
-    print(f'x {x}')
+    analogReading = eTape.value
+    print(f'Analog Reading: {analogReading}')
+    # covert value from kohms  to ohms
+    ohmsValue = analogReading * 1000
+    print(f'ohms Vale {ohmsValue}')
+    voltage = (5.0 / 1023) * ohmsValue
+    print(f'voltage: {voltage}')
     print('\n')
-    time.sleep(5)
+    time.sleep(2)
 
+
+# TODO double check code
+# TODO my code is out putting kohms need to change to ohms
+# https://hextobinary.com/unit/resistance/from/kohm/to/ohm
 
 
 
