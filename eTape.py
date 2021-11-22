@@ -22,6 +22,7 @@ def read_resistance():
     resist = (1023 / reading) - 1
     resist = resistor / resist
     print('resistance(): %.2f' % resist)
+    return resist
 
 
 def resistance_to_volume(resistance, zero_resistance, cal_resistance, cal_volume):
@@ -43,12 +44,15 @@ def water_level_percentage():
 def test_code():
     reading = eTape.value * 1000
     print(f'adc: {reading}')
-    # covert to resistance
-    resist = (1023 / reading) - 1
-    resist = resistor / resist
-    print(f'resistance: {resist}')
-    read_resistance()
+    # # covert to resistance
+    # resist = (1023 / reading) - 1
+    # resist = resistor / resist
+    # print(f'resistance: {resist}')
+    resistance = read_resistance()
     water_level_percentage(reading)
+    print("====================")
+    volume = resistance_to_volume(resistance, no_volume_resistance, calibration_resistance, calibration_volume)
+    print(f'volume: {volume}')
 
 
 if __name__ == "__main__":
