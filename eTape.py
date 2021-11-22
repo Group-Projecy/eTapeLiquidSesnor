@@ -4,9 +4,9 @@ import time
 resistor = 560      # Value of the series resistor in ohms
 eTape = MCP3008(0)  # MCP pin the output is going to
 
-no_volume_resistance = 2086  # Resistance value (in ohms) when no liquid is present
-calibration_resistance = 721  # Resistance value (in ohms) when liquid is at max line.
-calibration_volume = 500.00
+no_volume_resistance = 2060  # Resistance value (in ohms) when no liquid is present
+calibration_resistance = 485  # Resistance value (in ohms) when liquid is at max line.
+calibration_volume = 30        # length of tape (cm0
 
 
 def main():
@@ -25,25 +25,24 @@ def read_resistance():
     return resist
 
 
-def resistance_to_volume(resistance, zero_resistance, cal_resistance, cal_volume):
-    if resistance > zero_resistance or (zero_resistance - cal_resistance) == 0.0:
+def water_level(ohms_value):
+    if ohms_value > no_volume_resistance or (no_volume_resistance - calibration_resistance) == 0.0:
         # if no max value for resistance is set
         return 0.0
-    scale = (zero_resistance - resistance) / (zero_resistance - cal_resistance)
-    return cal_volume * scale
+    else:
+        water_level_measurement = (no_volume_resistance - ohms_value) / (no_volume_resistance - calibration_resistance)
+        cm = 30 * water_level_measurement
+        return cm
 
 
 def test_code():
     reading = eTape.value * 1000
     print(f'adc: {reading}')
-    # # covert to resistance
-    # resist = (1023 / reading) - 1
-    # resist = resistor / resist
-    # print(f'resistance: {resist}')
+    # ohms_value = resistance
     resistance = read_resistance()
     print("====================")
-    volume = resistance_to_volume(resistance, no_volume_resistance, calibration_resistance, calibration_volume)
-    print(f'volume: {volume}')
+    cm_level = water_level(resistance)
+    print(f'{cm_level} cm')
 
 
 if __name__ == "__main__":
