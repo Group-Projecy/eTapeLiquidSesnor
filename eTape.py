@@ -5,14 +5,13 @@ resistor = 560
 eTape = MCP3008(0)
 # TODO: Calibration is off need to re adjust
 no_volume_resistance = 2086  # Resistance value (in ohms) when no liquid is present
-calibration_resistance = 0.00  # Resistance value (in ohms) when liquid is at max line.
-calibration_volume = 0.00
+calibration_resistance = 721  # Resistance value (in ohms) when liquid is at max line.
+calibration_volume = 500.00
 
 
 def main():
     while True:
-        # ohms_value = calculate_ohms_value(eTape)
-        # water_level = water_level_percentage(ohms_value)
+        # water_level = water_level_percentage()
         # print(f'water level %: {water_level}')
         # print('\n')
         test_code()
@@ -33,7 +32,8 @@ def resistance_to_volume():
     return 0
 
 
-def water_level_percentage(ohms_value):
+def water_level_percentage():
+    ohms_value = eTape.value * 1000
     percentage = (no_volume_resistance - ohms_value) / (no_volume_resistance - calibration_resistance)
     cm = 30 * percentage
     print(f'cm value: {cm}')
