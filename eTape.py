@@ -15,6 +15,7 @@ def main():
         time.sleep(1)
         print("\n")
 
+
 def write_to_file(water_level):
     temp_readings_file = open("dataGathered-Etape.txt", "a")
     temp_readings_file.write('\ncm: '+water_level)
@@ -48,6 +49,7 @@ def test_code():
     print("====================")
     cm_level = water_level(resistance)
     print(f'{cm_level} cm')
+    write_to_file(cm_level)
 
 
 if __name__ == "__main__":
