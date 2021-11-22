@@ -41,7 +41,6 @@ def test_code():
     # resist = resistor / resist
     # print(f'resistance: {resist}')
     resistance = read_resistance()
-    water_level_percentage()
     print("====================")
     volume = resistance_to_volume(resistance, no_volume_resistance, calibration_resistance, calibration_volume)
     print(f'volume: {volume}')
