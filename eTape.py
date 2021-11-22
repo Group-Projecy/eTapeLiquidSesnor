@@ -1,9 +1,9 @@
 from gpiozero import MCP3008
 import time
 
-resistor = 560
-eTape = MCP3008(0)
-# TODO: Calibration is off need to re adjust
+resistor = 560      # Value of the series resistor in ohms
+eTape = MCP3008(0)  # MCP pin the output is going to
+
 no_volume_resistance = 2086  # Resistance value (in ohms) when no liquid is present
 calibration_resistance = 721  # Resistance value (in ohms) when liquid is at max line.
 calibration_volume = 500.00
@@ -11,9 +11,6 @@ calibration_volume = 500.00
 
 def main():
     while True:
-        # water_level = water_level_percentage()
-        # print(f'water level %: {water_level}')
-        # print('\n')
         test_code()
         time.sleep(1)
         print("\n")
@@ -27,9 +24,12 @@ def read_resistance():
     print('resistance(): %.2f' % resist)
 
 
-def resistance_to_volume():
-    # TODO: Need to implement
-    return 0
+def resistance_to_volume(resistance, zero_resistance, cal_resistance, cal_volume):
+    if resistance > zero_resistance or (zero_resistance - cal_resistance) == 0.0:
+        # if no max value for resistance is set
+        return 0.0
+    scale = (zero_resistance - resistance) / (zero_resistance - cal_resistance)
+    return cal_volume * scale
 
 
 def water_level_percentage():
