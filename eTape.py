@@ -15,6 +15,11 @@ def main():
         time.sleep(1)
         print("\n")
 
+def write_to_file(water_level):
+    temp_readings_file = open("dataGathered-Etape.txt", "a")
+    temp_readings_file.write('\ncm: '+water_level)
+    temp_readings_file.close()
+
 
 def read_resistance():
     reading = eTape.value * 1000
