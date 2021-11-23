@@ -29,12 +29,6 @@ def main():
         print("\n")
 
 
-def write_to_file(water_level):
-    temp_readings_file = open("dataGathered-Etape.txt", "a")
-    temp_readings_file.write('\nWaterLevel: {0:0.0f} cm'.format(water_level))
-    temp_readings_file.close()
-
-
 def read_resistance():
     reading = eTape.value * 1000
     # covert to resistance
