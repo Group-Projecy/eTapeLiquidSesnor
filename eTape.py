@@ -1,5 +1,6 @@
 from gpiozero import MCP3008
 import time
+import os
 
 resistor = 560      # Value of the series resistor in ohms
 eTape = MCP3008(0)  # MCP pin the output is going to
@@ -13,6 +14,12 @@ from pubnub.enums import PNStatusCategory, PNOperationType
 from pubnub.pnconfiguration import PNConfiguration
 from pubnub.pubnub import PubNub
 
+my_channel = "seans-pi-channel"
+pnconfig = PNConfiguration()
+pnconfig.subscribe_key = os.getenv("PUBNUB_SUBSCRIBE")
+pnconfig.publish_key = os.getenv("PUBNUB_PUBLISH")
+pnconfig.uuid = '2ca147c6-d6e1-4d2c-9c38-a34d6938efd6'
+pubnub = PubNub(pnconfig)
 
 def main():
     while True:
