@@ -1,4 +1,4 @@
-#E-Tape Liquid Sensor
+# E-Tape Liquid Sensor
 ### Useful links for using the E-Tape:
 [ETape Datasheet](https://cdn-shop.adafruit.com/datasheets/eTapeApp.pdf)
 

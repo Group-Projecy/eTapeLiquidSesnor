@@ -5,7 +5,7 @@ import os
 resistor = 560      # Value of the series resistor in ohms
 eTape = MCP3008(0)  # MCP pin the output is going to
 
-no_volume_resistance = 2060  # Resistance value (in ohms) when no liquid is present
+no_volume_resistance = 2060  # Resistance value (in ohms) when no liquid is present NOTE: it changes slightly every time
 calibration_resistance = 485  # Resistance value (in ohms) when liquid is at max line.
 calibration_volume = 30        # length of tape (cm0
 
@@ -18,7 +18,7 @@ my_channel = "seans-pi-channel"
 pnconfig = PNConfiguration()
 pnconfig.subscribe_key = os.getenv("PUBNUB_SUBSCRIBE")
 pnconfig.publish_key = os.getenv("PUBNUB_PUBLISH")
-pnconfig.uuid = '2ca147c6-d6e1-4d2c-9c38-a34d6938efd6'
+pnconfig.uuid = '7929c8df-30b8-4473-a865-1a7ed1adef93'
 pubnub = PubNub(pnconfig)
 
 
@@ -66,8 +66,8 @@ def test_code():
     print(f'{water_level} cm')
     print('WaterLevel: {0:0.1f} cm'.format(water_level))
     print('WaterLevel: {0:0.0f} cm'.format(water_level))
-    publish(my_channel, {"WaterLevel ": '{0:0.0f} cm'.format()})
-    publish(my_channel, {"WaterLevel ": '{0:0.1f} cm'.format()})
+    publish(my_channel, {"WaterLevel ": '{0:0.0f} cm'.format(water_level)})
+    publish(my_channel, {"WaterLevel ": '{0:0.1f} cm'.format(water_level)})
 
 
 # ----------------------------- PubNub Code ---------------------------------------------
