@@ -8,6 +8,11 @@ no_volume_resistance = 2060  # Resistance value (in ohms) when no liquid is pres
 calibration_resistance = 485  # Resistance value (in ohms) when liquid is at max line.
 calibration_volume = 30        # length of tape (cm0
 
+from pubnub.callbacks import SubscribeCallback
+from pubnub.enums import PNStatusCategory, PNOperationType
+from pubnub.pnconfiguration import PNConfiguration
+from pubnub.pubnub import PubNub
+
 
 def main():
     while True:
@@ -18,7 +23,7 @@ def main():
 
 def write_to_file(water_level):
     temp_readings_file = open("dataGathered-Etape.txt", "a")
-    temp_readings_file.write('\ncm: '+water_level)
+    temp_readings_file.write('\nWaterLevel: {0:0.0f} cm'.format(water_level))
     temp_readings_file.close()
 
 
@@ -35,6 +40,8 @@ def water_level(ohms_value):
     if ohms_value > no_volume_resistance or (no_volume_resistance - calibration_resistance) == 0.0:
         # if no max value for resistance is set
         return 0.0
+    # elif ohms_value > calibration_resistance:
+    #     # TODO if over max resistance = tank full
     else:
         water_level_measurement = (no_volume_resistance - ohms_value) / (no_volume_resistance - calibration_resistance)
         cm = 30 * water_level_measurement
@@ -49,7 +56,8 @@ def test_code():
     print("====================")
     cm_level = water_level(resistance)
     print(f'{cm_level} cm')
-    write_to_file(cm_level)
+    print('WaterLevel: {0:0.1f} cm'.format(cm_level))
+    print('WaterLevel: {0:0.0f} cm'.format(cm_level))
 
 
 if __name__ == "__main__":

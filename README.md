@@ -14,3 +14,6 @@ On the Pi open a terminal window and install the spidev package
 
 Enable SPI from the Raspberry Pi Configuration in Interfaces
 `raspi-config`
+
+## Pubnub Connection - On the file
+`pip install 'pubnub>=5.4.0'`
