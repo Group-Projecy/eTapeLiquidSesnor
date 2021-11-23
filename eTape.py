@@ -24,7 +24,11 @@ pubnub = PubNub(pnconfig)
 
 def main():
     while True:
-        test_code()
+        # ohms_value = resistance
+        resistance = read_resistance()
+        water_level = get_water_level(resistance)
+        print('WaterLevel: {0:0.0f} cm'.format(water_level))
+        publish(my_channel, {"WaterLevel ": '{0:0.0f} cm'.format(water_level)})
         time.sleep(1)
         print("\n")
 
@@ -42,8 +46,6 @@ def get_water_level(ohms_value):
     if ohms_value > no_volume_resistance or (no_volume_resistance - calibration_resistance) == 0.0:
         # if no max value for resistance is set
         return 0.0
-    # elif ohms_value > calibration_resistance:
-    #     # TODO if over max resistance = tank full
     else:
         water_level_measurement = (no_volume_resistance - ohms_value) / (no_volume_resistance - calibration_resistance)
         cm = 30 * water_level_measurement
@@ -51,7 +53,6 @@ def get_water_level(ohms_value):
 
 
 # ----------------------------- PubNub Code ---------------------------------------------
-
 def publish(channel, msg):
     pubnub.publish().channel(my_channel).message(msg).pn_async(my_publish_callback)
 
@@ -91,6 +92,7 @@ class MySubscribeCallback(SubscribeCallback):
             print(e)
             pass
     #  handle event = if oil level = < 20% send message
+
     # def handleEvent(self, msg):
     #     global data
     #     eventData = msg["event"]
