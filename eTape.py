@@ -30,12 +30,12 @@ def main():
 
 
 def read_resistance():
-    reading = eTape.value * 1000
-    # covert to resistance
+    reading = eTape.value * 1000  # adc value
+    # covert adc value to resistance
     resist = (1023 / reading) - 1
     resist = resistor / resist
     print('resistance(): %.2f' % resist)
-    return resist
+    return resist  # ohms value
 
 
 def get_water_level(ohms_value):
@@ -48,20 +48,6 @@ def get_water_level(ohms_value):
         water_level_measurement = (no_volume_resistance - ohms_value) / (no_volume_resistance - calibration_resistance)
         cm = 30 * water_level_measurement
         return cm
-
-
-def test_code():
-    reading = eTape.value * 1000
-    print(f'adc: {reading}')
-    # ohms_value = resistance
-    resistance = read_resistance()
-    print("====================")
-    water_level = get_water_level(resistance)
-    print(f'{water_level} cm')
-    print('WaterLevel: {0:0.1f} cm'.format(water_level))
-    print('WaterLevel: {0:0.0f} cm'.format(water_level))
-    publish(my_channel, {"WaterLevel ": '{0:0.0f} cm'.format(water_level)})
-    publish(my_channel, {"WaterLevel ": '{0:0.1f} cm'.format(water_level)})
 
 
 # ----------------------------- PubNub Code ---------------------------------------------
