@@ -72,7 +72,7 @@ def resistance_to_volume(ohms_value):
 
 # This method will convert the water level from mm³ to litres and then scale up it up to represent a real oil tank size
 # as our demo is in 500ml tube
-def upscale_water_level():
+def covert_water_level_litres(volume):
     return 0
 
 
@@ -150,4 +150,3 @@ def my_publish_callback(envelope, status):
 
 if __name__ == "__main__":
     main()
-    print("hello")
