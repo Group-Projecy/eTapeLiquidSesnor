@@ -32,7 +32,8 @@ def main():
         water_level = get_water_level(resistance)
         timestamp = get_time_stamp()
         water_volume = get_water_volume(resistance)
-        publish(my_channel, {"WaterLevel ": '{0:0.0f} cm'.format(water_level), "Time ": timestamp})
+        water_level_litres = convert_water_level_litres(water_volume)
+        publish(my_channel, {"WaterLevel ": '{0:0.0f} Litres'.format(water_level_litres), "Time ": timestamp})
         time.sleep(1)
         print("\n")
 
@@ -71,7 +72,7 @@ def get_water_volume(ohms_value):
 # This method will convert the water level from ml³ to litres and then scale up it up to represent a real oil tank size
 # as our demo is in 500ml tube
 # 500 ml³ represents 1000 litres
-def covert_water_level_litres(volume):
+def convert_water_level_litres(volume):
     return volume * 2
 
 
@@ -87,7 +88,7 @@ def debug_code():
     # ohms_value = resistance
     resistance = read_resistance()
     water_volume = get_water_volume(resistance)
-    water_level_litres = covert_water_level_litres(water_volume)
+    water_level_litres = convert_water_level_litres(water_volume)
     print("====================")
     print('resistance(): %.2f' % resistance)  # just print to console for debugging and calibration
     print('water volume: {0:0.0f} ml³'.format(water_volume))
