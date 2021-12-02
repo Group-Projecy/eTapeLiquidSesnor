@@ -26,20 +26,15 @@ pubnub = PubNub(pnconfig)
 
 def main():
     while True:
+        debug_code()
         # ohms_value = resistance
         resistance = read_resistance()
         water_level = get_water_level(resistance)
         timestamp = get_time_stamp()
-        publish(my_channel, {"WaterLevel ": '{0:0.0f} cm'.format(water_level)})
-        publish(my_channel, {"Time ": timestamp})
-
-        # Added code for testing =======================
         water_volume = get_water_volume(resistance)
-        print('water volume: {0:0.0f} mm³}'.format(water_volume))
-        # end =============================
+        publish(my_channel, {"WaterLevel ": '{0:0.0f} cm'.format(water_level), "Time ": timestamp})
         time.sleep(1)
         print("\n")
-        debug_code()
 
 
 # reads the out from the mcp and converts the the out put to ohms value
@@ -73,10 +68,11 @@ def get_water_volume(ohms_value):
         return calibration_volume * water_level_scale  # returns the value in mm³
 
 
-# This method will convert the water level from mm³ to litres and then scale up it up to represent a real oil tank size
+# This method will convert the water level from ml³ to litres and then scale up it up to represent a real oil tank size
 # as our demo is in 500ml tube
+# 500 ml³ represents 1000 litres
 def covert_water_level_litres(volume):
-    return 0
+    return volume * 2
 
 
 def get_time_stamp():
@@ -90,10 +86,12 @@ def get_time_stamp():
 def debug_code():
     # ohms_value = resistance
     resistance = read_resistance()
+    water_volume = get_water_volume(resistance)
+    water_level_litres = covert_water_level_litres(water_volume)
     print("====================")
-    water_level = get_water_level(resistance)
-    print('WaterLevel: {0:0.0f} cm'.format(water_level))
     print('resistance(): %.2f' % resistance)  # just print to console for debugging and calibration
+    print('water volume: {0:0.0f} ml³'.format(water_volume))
+    print('Water Level Scaled up: {0:0.0f} L'.format(water_level_litres))
 
 
 # ----------------------------- PubNub Code ---------------------------------------------
