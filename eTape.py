@@ -8,8 +8,8 @@ eTape = MCP3008(0)  # MCP pin the output is going to
 
 no_volume_resistance = 2060  # Resistance value (in ohms) when no liquid is present NOTE: it changes slightly every time
 calibration_resistance = 485  # Resistance value (in ohms) when liquid is at max line.
-calibration_volume = 30  # length of tape
-# calibration_volume = 500
+# calibration_volume = 30  # length of tape
+calibration_volume = 500
 
 from pubnub.callbacks import SubscribeCallback
 from pubnub.enums import PNStatusCategory, PNOperationType
@@ -18,10 +18,8 @@ from pubnub.pubnub import PubNub
 
 my_channel = "seans-pi-channel"
 pnconfig = PNConfiguration()
-# pnconfig.subscribe_key = os.getenv("PUBNUB_SUBSCRIBE")
-# pnconfig.publish_key = os.getenv("PUBNUB_PUBLISH")
-pnconfig.subscribe_key = 'sub-c-7cefa8b0-3bc5-11ec-8182-fea14ba1eb2b'
-pnconfig.publish_key = 'pub-c-c4594a32-80ec-4318-812c-62ec67e14436'
+pnconfig.subscribe_key = os.getenv("PUBNUB_SUBSCRIBE")
+pnconfig.publish_key = os.getenv("PUBNUB_PUBLISH")
 pnconfig.uuid = '7929c8df-30b8-4473-a865-1a7ed1adef93'
 pubnub = PubNub(pnconfig)
 
@@ -35,8 +33,14 @@ def main():
         timestamp = get_time_stamp()
         publish(my_channel, {"WaterLevel ": '{0:0.0f} cm'.format(water_level)})
         publish(my_channel, {"Time ": timestamp})
+
+        # Added code for testing =======================
+        water_volume = get_water_volume(resistance)
+        print(f'water volume: {water_volume}')
+        # end =============================
         time.sleep(1)
         print("\n")
+        debug_code()
 
 
 # reads the out from the mcp and converts the the out put to ohms value
@@ -61,7 +65,7 @@ def get_water_level(ohms_value):
 
 
 # converts the resistance out put to the water volume of the water tube
-def resistance_to_volume(ohms_value):
+def get_water_volume(ohms_value):
     if ohms_value > no_volume_resistance or (no_volume_resistance - calibration_resistance) == 0.0:
         # if no max value for resistance is set
         return 0.0
