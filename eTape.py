@@ -1,5 +1,6 @@
 from gpiozero import MCP3008
 import time
+import datetime
 import os
 
 resistor = 560      # Value of the series resistor in ohms
@@ -7,7 +8,8 @@ eTape = MCP3008(0)  # MCP pin the output is going to
 
 no_volume_resistance = 2060  # Resistance value (in ohms) when no liquid is present NOTE: it changes slightly every time
 calibration_resistance = 485  # Resistance value (in ohms) when liquid is at max line.
-calibration_volume = 30        # length of tape (cm0
+calibration_volume = 30        # length of tape
+# calibration_volume = 500
 
 from pubnub.callbacks import SubscribeCallback
 from pubnub.enums import PNStatusCategory, PNOperationType
@@ -16,8 +18,10 @@ from pubnub.pubnub import PubNub
 
 my_channel = "seans-pi-channel"
 pnconfig = PNConfiguration()
-pnconfig.subscribe_key = os.getenv("PUBNUB_SUBSCRIBE")
-pnconfig.publish_key = os.getenv("PUBNUB_PUBLISH")
+# pnconfig.subscribe_key = os.getenv("PUBNUB_SUBSCRIBE")
+# pnconfig.publish_key = os.getenv("PUBNUB_PUBLISH")
+pnconfig.subscribe_key = 'sub-c-7cefa8b0-3bc5-11ec-8182-fea14ba1eb2b'
+pnconfig.publish_key = 'pub-c-c4594a32-80ec-4318-812c-62ec67e14436'
 pnconfig.uuid = '7929c8df-30b8-4473-a865-1a7ed1adef93'
 pubnub = PubNub(pnconfig)
 
@@ -28,7 +32,9 @@ def main():
         resistance = read_resistance()
         water_level = get_water_level(resistance)
         print('WaterLevel: {0:0.0f} cm'.format(water_level))
+        timestamp = get_time_stamp()
         publish(my_channel, {"WaterLevel ": '{0:0.0f} cm'.format(water_level)})
+        publish(my_channel, {"Time ": timestamp})
         time.sleep(1)
         print("\n")
 
@@ -51,7 +57,10 @@ def get_water_level(ohms_value):
         cm = 30 * water_level_measurement
         return cm
 
-
+def get_time_stamp():
+    now = datetime.datetime.now()
+    time_str = now.strftime("%Y-%m-%d %H:%M:%S")
+    return time_str
 # ----------------------------- PubNub Code ---------------------------------------------
 def publish(channel, msg):
     pubnub.publish().channel(my_channel).message(msg).pn_async(my_publish_callback)
