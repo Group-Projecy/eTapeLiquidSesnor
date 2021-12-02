@@ -6,8 +6,8 @@ import os
 resistor = 560  # Value of the series resistor in ohms
 eTape = MCP3008(0)  # MCP pin the output is going to
 
-no_volume_resistance = 2060  # Resistance value (in ohms) when no liquid is present NOTE: it changes slightly every time
-calibration_resistance = 485  # Resistance value (in ohms) when liquid is at max line.
+no_volume_resistance = 2093  # Resistance value (in ohms) when no liquid is present NOTE: it changes slightly every time
+calibration_resistance = 730  # Resistance value (in ohms) when liquid is at max line.
 # calibration_volume = 30  # length of tape
 calibration_volume = 500
 
@@ -29,14 +29,13 @@ def main():
         # ohms_value = resistance
         resistance = read_resistance()
         water_level = get_water_level(resistance)
-        print('WaterLevel: {0:0.0f} cm'.format(water_level))
         timestamp = get_time_stamp()
         publish(my_channel, {"WaterLevel ": '{0:0.0f} cm'.format(water_level)})
         publish(my_channel, {"Time ": timestamp})
 
         # Added code for testing =======================
         water_volume = get_water_volume(resistance)
-        print(f'water volume: {water_volume}')
+        print('water volume: {0:0.0f} mm³}'.format(water_volume))
         # end =============================
         time.sleep(1)
         print("\n")
@@ -49,11 +48,11 @@ def read_resistance():
     # covert adc value to resistance
     resist = (1023 / reading) - 1
     resist = resistor / resist
-    print('resistance(): %.2f' % resist)  # just print to console for debugging and calibration
+    # print('resistance(): %.2f' % resist)  # just print to console for debugging and calibration
     return resist  # ohms value
 
 
-# gets the level of the water in cm against the cm line on the level
+# gets the level of the water in cm against the cm line on the level not as accurate as volume
 def get_water_level(ohms_value):
     if ohms_value > no_volume_resistance or (no_volume_resistance - calibration_resistance) == 0.0:
         # if no max value for resistance is set
@@ -71,7 +70,7 @@ def get_water_volume(ohms_value):
         return 0.0
     else:
         water_level_scale = (no_volume_resistance - ohms_value) / (no_volume_resistance - calibration_resistance)
-        return calibration_volume * water_level_scale  # should return the value in mm³
+        return calibration_volume * water_level_scale  # returns the value in mm³
 
 
 # This method will convert the water level from mm³ to litres and then scale up it up to represent a real oil tank size
@@ -94,6 +93,7 @@ def debug_code():
     print("====================")
     water_level = get_water_level(resistance)
     print('WaterLevel: {0:0.0f} cm'.format(water_level))
+    print('resistance(): %.2f' % resistance)  # just print to console for debugging and calibration
 
 
 # ----------------------------- PubNub Code ---------------------------------------------
