@@ -45,7 +45,7 @@ def read_resistance():
     # covert adc value to resistance
     resist = (1023 / reading) - 1
     resist = resistor / resist
-    print('resistance(): %.2f' % resist)
+    print('resistance(): %.2f' % resist)  # just print to console for debugging and calibration
     return resist  # ohms value
 
 
@@ -80,6 +80,16 @@ def get_time_stamp():
     now = datetime.datetime.now()
     time_str = now.strftime("%Y-%m-%d %H:%M:%S")
     return time_str
+
+
+# this method is used for debugging and calibrating the sensor
+# also used for IOT demo of CA2
+def debug_code():
+    # ohms_value = resistance
+    resistance = read_resistance()
+    print("====================")
+    water_level = get_water_level(resistance)
+    print('WaterLevel: {0:0.0f} cm'.format(water_level))
 
 
 # ----------------------------- PubNub Code ---------------------------------------------
