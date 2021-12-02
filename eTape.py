@@ -3,12 +3,12 @@ import time
 import datetime
 import os
 
-resistor = 560      # Value of the series resistor in ohms
+resistor = 560  # Value of the series resistor in ohms
 eTape = MCP3008(0)  # MCP pin the output is going to
 
 no_volume_resistance = 2060  # Resistance value (in ohms) when no liquid is present NOTE: it changes slightly every time
 calibration_resistance = 485  # Resistance value (in ohms) when liquid is at max line.
-calibration_volume = 30        # length of tape
+calibration_volume = 30  # length of tape
 # calibration_volume = 500
 
 from pubnub.callbacks import SubscribeCallback
@@ -150,3 +150,5 @@ def my_publish_callback(envelope, status):
 
 if __name__ == "__main__":
     main()
+
+#  Ref website that help me with e-tape: https://learn.adafruit.com/smart-measuring-cup?view=all
